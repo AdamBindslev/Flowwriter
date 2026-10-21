@@ -1,0 +1,24 @@
+RewriteEngine On
+
+# 1. Gennemtving altid HTTPS (tilpasset Gigahost reverse-proxy)
+RewriteCond %{HTTP:X-Forwarded-Proto} !https
+RewriteRule ^(.*)$ https://%{HTTP_HOST}/$1 [L,R=301]
+
+# 2. Sørg for at Service Worker og manifest altid hentes frisk (aldrig sidder fast i cache)
+<FilesMatch "^(sw\.js|manifest\.json)$">
+    Header set Cache-Control "no-cache, no-store, must-revalidate"
+    Header set Pragma "no-cache"
+    Header set Expires 0
+</FilesMatch>
+
+# 3. Korrekte MIME-typer for PWA og lyde
+<IfModule mod_mime.c>
+    AddType application/manifest+json .json
+    AddType audio/wav .wav
+</IfModule>
+
+# 4. Grundlæggende sikkerhedsheadere
+<IfModule mod_headers.c>
+    Header always set X-Content-Type-Options "nosniff"
+    Header always set X-Frame-Options "SAMEORIGIN"
+</IfModule>

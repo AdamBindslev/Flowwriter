@@ -1,0 +1,1849 @@
+/* CSS Design System — Typewriter Edition (Skrivemaskine Udgave) */
+
+:root {
+  color-scheme: dark;
+  --font-typewriter: 'Courier Prime', 'Special Elite', monospace;
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+
+  /* Desk Background (Warm Mahogany & Steel) */
+  --bg-desk: #181512;
+  --bg-desk-gradient: radial-gradient(circle at 50% 20%, #2a241e 0%, #14110e 100%);
+  
+  /* Machine Elements */
+  --metal-dark: #262626;
+  --metal-light: #404040;
+  --metal-chrome: linear-gradient(180deg, #d4d4d8 0%, #71717a 50%, #3f3f46 100%);
+  --metal-border: #52525b;
+
+  /* Paper Tokens */
+  --bg-paper: #fcf8f2;
+  --paper-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 1px 3px rgba(0, 0, 0, 0.3);
+  --margin-line-color: rgba(225, 29, 72, 0.35);
+  --paper-divider-color: #e7e0d6;
+
+  /* Ribbon Ink Variants */
+  --ink-black: #1c1917;
+  --ink-red: #9f1239;
+  --ink-sepia: #78350f;
+  
+  /* Current Active Ink Color */
+  --ink-current: var(--ink-black);
+
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+}
+
+/* Ribbon Color State Overrides */
+html[data-ribbon="black"] {
+  --ink-current: var(--ink-black);
+}
+
+html[data-ribbon="red"] {
+  --ink-current: var(--ink-red);
+}
+
+html[data-ribbon="sepia"] {
+  --ink-current: var(--ink-sepia);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  scrollbar-width: thin;
+  scrollbar-color: #3d3530 transparent;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #3d3530;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #574c43;
+}
+
+body.typewriter-body {
+  font-family: var(--font-typewriter);
+  background: var(--bg-desk);
+  background-image: var(--bg-desk-gradient);
+  color: #e5e5e5;
+  height: 100vh;
+  overflow: hidden;
+  line-height: 1.6;
+}
+
+.desk-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 12px 18px;
+  gap: 10px;
+}
+
+/* Top Header Navigation (Modular Stacked) */
+.tw-header {
+  position: relative;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  background: #1c1917;
+  border: 1px solid #332d29;
+  border-radius: var(--radius-md);
+  padding: 6px 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.tw-header-main {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  flex-wrap: nowrap;
+}
+
+.tw-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.tw-logo-key {
+  width: 32px;
+  height: 32px;
+  background: linear-gradient(135deg, #b91c1c, #78350f);
+  border: 2px solid #ea580c;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.3), 0 2px 6px rgba(0, 0, 0, 0.5);
+  flex-shrink: 0;
+}
+
+.tw-logo-key i {
+  width: 16px;
+  height: 16px;
+}
+
+.tw-brand-info h1 {
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  color: #f5f5f4;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+}
+
+.tw-badge {
+  font-family: var(--font-typewriter);
+  font-size: 0.65rem;
+  background: #78350f;
+  color: #fef08a;
+  padding: 1px 5px;
+  border-radius: 3px;
+  border: 1px solid #b45309;
+  letter-spacing: 0.05em;
+}
+
+.tw-brand-info .tw-sub {
+  font-family: var(--font-sans);
+  font-size: 0.7rem;
+  color: #a8a29e;
+  display: block;
+  white-space: nowrap;
+}
+
+.tw-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: nowrap;
+  flex-shrink: 0;
+  margin-left: auto;
+}
+
+.tw-header-sub {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding-top: 4px;
+  border-top: 1px dashed #332d29;
+  flex-wrap: nowrap;
+}
+
+.tw-nav-group {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.tw-v-divider {
+  width: 1px;
+  height: 24px;
+  background: #44403c;
+}
+
+.tw-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-sans);
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 6px 12px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  border: 1px solid #44403c;
+  background: #292524;
+  color: #d6d3d1;
+  text-decoration: none;
+  transition: all 0.15s ease;
+}
+
+.tw-btn:hover {
+  background: #3c3633;
+  color: #ffffff;
+  border-color: #78716c;
+}
+
+.tw-btn-primary {
+  background: linear-gradient(180deg, #b91c1c 0%, #881337 100%);
+  color: #ffffff;
+  border-color: #9f1239;
+  box-shadow: 0 2px 8px rgba(159, 18, 57, 0.4);
+}
+
+.tw-btn-primary:hover {
+  background: linear-gradient(180deg, #dc2626 0%, #9f1239 100%);
+}
+
+.tw-btn-icon {
+  padding: 6px 10px;
+}
+
+.tw-btn-icon.active {
+  border-color: #10b981;
+  color: #34d399;
+  background: rgba(16, 185, 129, 0.1);
+}
+
+/* Ribbon Color Selector */
+.ribbon-selector {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: #0c0a09;
+  padding: 4px 8px;
+  border-radius: var(--radius-sm);
+  border: 1px solid #292524;
+}
+
+.ribbon-label {
+  font-family: var(--font-sans);
+  font-size: 0.725rem;
+  color: #a8a29e;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.ribbon-btn {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  padding: 3px 8px;
+  border: 1px solid transparent;
+  background: transparent;
+  color: #a8a29e;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.ribbon-btn:hover {
+  color: #ffffff;
+}
+
+.ribbon-btn.active {
+  background: #292524;
+  color: #f5f5f4;
+  border-color: #57534e;
+  font-weight: 600;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+}
+.dot-black { background: #1c1917; border: 1px solid #78716c; }
+.dot-red { background: #e11d48; }
+.dot-sepia { background: #b45309; }
+
+/* Typewriter Main Machine Wrapper */
+.tw-machine {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  background: #171513;
+  border: 2px solid #292524;
+  border-radius: var(--radius-lg);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.7);
+  overflow: hidden;
+  position: relative;
+}
+
+
+
+/* Keycap Formatting Toolbar (Modular 2-Row Stack) */
+.tw-toolbar {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  background: #181513;
+  padding: 6px 12px;
+  border-bottom: 1px solid #2a2420;
+  flex-shrink: 0;
+}
+
+.tw-keys-row {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  -webkit-overflow-scrolling: touch;
+  width: 100%;
+}
+
+.tw-keys-row::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  height: 0;
+}
+
+.tw-actions-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding-top: 4px;
+  border-top: 1px dashed #2a2420;
+  flex-wrap: nowrap;
+  width: 100%;
+}
+
+.tw-actions-left {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.keycap-group {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.key-divider {
+  width: 1px;
+  height: 24px;
+  background: #332b26;
+  margin: 0 4px;
+  flex-shrink: 0;
+}
+
+.tw-key {
+  box-sizing: border-box;
+  width: 36px;
+  height: 36px;
+  min-width: 36px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-typewriter, 'Courier Prime', monospace);
+  font-size: 0.85rem;
+  font-weight: 700;
+  background: linear-gradient(180deg, #3d3530 0%, #221d19 100%);
+  color: #e5e0dc;
+  border: 1px solid #574c43;
+  border-top-color: #6e6157;
+  border-radius: 5px;
+  padding: 0;
+  cursor: pointer;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 3px 0 #0f0d0b, 0 4px 6px rgba(0, 0, 0, 0.4);
+  transition: all 0.08s ease;
+  user-select: none;
+}
+
+.tw-key svg,
+.tw-key i[data-feather] {
+  width: 16px;
+  height: 16px;
+  stroke-width: 2.2px;
+  display: block;
+}
+
+.key-symbol {
+  font-family: var(--font-typewriter, 'Courier Prime', monospace);
+  font-size: 0.85rem;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  line-height: 1;
+}
+
+.strike-symbol {
+  text-decoration: line-through;
+  text-decoration-thickness: 2px;
+}
+
+.tw-key:hover {
+  background: linear-gradient(180deg, #4b423c 0%, #2d2621 100%);
+  border-color: #73655b;
+  color: #ffffff;
+}
+
+.tw-key:active {
+  transform: translateY(2px);
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.6), 0 1px 0 #0f0d0b, 0 2px 3px rgba(0, 0, 0, 0.4);
+}
+
+.tw-key.active {
+  background: linear-gradient(180deg, #b45309 0%, #78350f 100%) !important;
+  border-color: #f59e0b !important;
+  color: #fef3c7 !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 0 #0f0d0b, 0 0 10px rgba(245, 158, 11, 0.4) !important;
+  transform: translateY(2px);
+}
+
+.right-keys {
+  margin-left: auto;
+}
+
+/* Wide / Action Keycaps for right side */
+.tw-key-action {
+  width: auto !important;
+  min-width: auto !important;
+  height: 28px;
+  padding: 0 10px;
+  gap: 5px;
+  font-family: var(--font-sans, system-ui, sans-serif);
+  font-size: 0.78rem;
+  font-weight: 600;
+  border-radius: 4px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+}
+
+.tw-key-action svg,
+.tw-key-action i[data-feather] {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+}
+
+.tw-key-sample {
+  background: linear-gradient(180deg, #1e3a8a 0%, #172554 100%);
+  border-color: #3b82f6;
+  border-top-color: #60a5fa;
+  color: #dbeafe;
+}
+.tw-key-sample:hover {
+  background: linear-gradient(180deg, #2563eb 0%, #1e40af 100%);
+  color: #ffffff;
+}
+
+.tw-key-copy {
+  background: linear-gradient(180deg, #065f46 0%, #022c22 100%);
+  border-color: #10b981;
+  border-top-color: #34d399;
+  color: #d1fae5;
+}
+.tw-key-copy:hover {
+  background: linear-gradient(180deg, #059669 0%, #047857 100%);
+  color: #ffffff;
+}
+
+.tw-key-clear {
+  background: linear-gradient(180deg, #881337 0%, #4c0519 100%);
+  border-color: #f43f5e;
+  border-top-color: #fb7185;
+  color: #ffe4e6;
+}
+.tw-key-clear:hover {
+  background: linear-gradient(180deg, #e11d48 0%, #be123c 100%);
+  color: #ffffff;
+}
+
+/* Mode Tabs */
+.mode-tabs {
+  display: flex;
+  background: #12100e;
+  padding: 4px 16px 0;
+  gap: 4px;
+  border-bottom: 1px solid #292524;
+}
+
+.tw-tab {
+  font-family: var(--font-sans);
+  font-size: 0.775rem;
+  font-weight: 600;
+  padding: 6px 14px;
+  background: transparent;
+  color: #78716c;
+  border: 1px solid transparent;
+  border-bottom: none;
+  border-radius: 6px 6px 0 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.15s ease;
+}
+
+.tw-tab i {
+  width: 14px;
+  height: 14px;
+}
+
+.tw-tab:hover {
+  color: #d6d3d1;
+}
+
+.tw-tab.active {
+  background: #1c1917;
+  color: #f5f5f4;
+  border-color: #292524;
+}
+
+/* Paper Wrapper & Paper Sheet */
+.paper-wrapper {
+  flex: 1;
+  min-height: 0;
+  padding: 24px 24px 80px 24px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  background: #141210;
+  display: block;
+}
+
+.paper-sheet {
+  width: 100%;
+  max-width: 840px;
+  margin: 0 auto 60px auto;
+  background-color: var(--bg-paper);
+  border-radius: 2px;
+  box-shadow: var(--paper-shadow);
+  padding: 44px 52px 55vh 52px;
+  position: relative;
+  min-height: 100%;
+  height: fit-content;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  transition: padding-bottom 0.2s ease;
+}
+
+.paper-sheet.preview-active {
+  padding-bottom: 80px;
+}
+
+/* Red Left Margin Line */
+.margin-line {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 42px;
+  width: 1px;
+  background: var(--margin-line-color);
+  pointer-events: none;
+}
+
+.paper-header-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.tw-field-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.tw-field-label {
+  font-family: var(--font-typewriter);
+  font-size: 0.725rem;
+  font-weight: 700;
+  color: #78716c;
+  letter-spacing: 0.05em;
+}
+
+.tw-input {
+  width: 100%;
+  font-family: var(--font-typewriter);
+  font-size: 1rem;
+  color: var(--ink-current);
+  caret-color: var(--ink-current);
+  caret-shape: underscore;
+  background: rgba(0, 0, 0, 0.02);
+  border: none;
+  border-bottom: 1px dashed #d6ceb8;
+  padding: 4px 6px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.tw-input:focus {
+  border-bottom-color: var(--ink-current);
+  background: rgba(0, 0, 0, 0.03);
+}
+
+.tw-title-input {
+  font-size: 1.35rem;
+  font-weight: 700;
+}
+
+.tw-input-with-chips {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.tw-chips {
+  display: flex;
+  gap: 4px;
+  flex-shrink: 0;
+  flex-wrap: wrap;
+}
+
+.tw-chip {
+  font-family: var(--font-typewriter);
+  font-size: 0.7rem;
+  background: rgba(0, 0, 0, 0.04);
+  border: 1px solid #d6ceb8;
+  color: #57534e;
+  padding: 3px 6px;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.tw-chip:hover {
+  background: #e7e0d6;
+  color: var(--ink-current);
+}
+
+.paper-divider {
+  height: 1px;
+  background: var(--paper-divider-color);
+  margin: 16px 0;
+}
+
+.tw-view-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 480px;
+  height: auto;
+  position: relative;
+}
+
+.tw-view-container.hidden {
+  display: none;
+}
+
+/* Typewriter Textarea */
+.tw-textarea {
+  width: 100%;
+  min-height: 480px;
+  height: auto;
+  font-family: var(--font-typewriter);
+  font-size: 1.05rem;
+  line-height: 1.8;
+  color: var(--ink-current);
+  caret-color: transparent;
+  background: transparent;
+  border: none;
+  outline: none;
+  resize: none;
+  tab-size: 4;
+  overflow: hidden;
+  box-sizing: border-box;
+  display: block;
+}
+
+/* ==========================================================================
+   MECHANICAL TYPEWRITER TYPEGUIDE & HAMMER RECOIL
+   ========================================================================== */
+.tw-typeguide {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 2px;
+  height: 28px;
+  pointer-events: none;
+  z-index: 10;
+  opacity: 0;
+  transition: opacity 0.15s ease;
+  will-change: transform;
+}
+
+.tw-typeguide.active {
+  opacity: 1;
+}
+
+/* Vertical Striker Bar */
+.tw-typeguide-strike {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 2.5px;
+  height: 100%;
+  background-color: var(--ink-current);
+  border-radius: 1px;
+  box-shadow: 0 0 1px rgba(0, 0, 0, 0.4);
+  animation: twMechanicalBlink 0.9s infinite steps(1);
+}
+
+.tw-typeguide.typing .tw-typeguide-strike {
+  animation: none;
+  opacity: 1;
+}
+
+/* Vintage Metal Guide Notch at the Base of the Striker */
+.tw-typeguide-notch {
+  position: absolute;
+  bottom: -4px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 12px;
+  height: 5px;
+  border-left: 2px solid var(--ink-current);
+  border-right: 2px solid var(--ink-current);
+  border-bottom: 2px solid var(--ink-current);
+  border-radius: 0 0 2px 2px;
+  opacity: 0.65;
+  box-sizing: border-box;
+}
+
+.tw-typeguide-notch::after {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 3px solid transparent;
+  border-right: 3px solid transparent;
+  border-bottom: 3px solid var(--ink-current);
+  opacity: 0.9;
+}
+
+/* Micro Ink Flash / Bloom */
+.tw-strike-flash {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 22px;
+  height: 22px;
+  margin-top: -11px;
+  margin-left: -11px;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--ink-current) 0%, rgba(0, 0, 0, 0.05) 50%, transparent 75%);
+  opacity: 0;
+  transform: scale(0.3);
+  pointer-events: none;
+}
+
+/* Hammer Recoil Animation on Key Strike */
+.tw-typeguide.striking {
+  animation: twHammerRecoil 0.09s ease-out forwards;
+}
+
+.tw-typeguide.striking .tw-strike-flash {
+  animation: twInkBloom 0.12s ease-out forwards;
+}
+
+@keyframes twHammerRecoil {
+  0% {
+    transform: translate3d(var(--tg-x, 0), var(--tg-y, 0), 0) scale(1) translateY(0);
+  }
+  30% {
+    transform: translate3d(var(--tg-x, 0), var(--tg-y, 0), 0) scale(1.15) translateY(-3px);
+    filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.3));
+  }
+  65% {
+    transform: translate3d(var(--tg-x, 0), var(--tg-y, 0), 0) scale(0.97) translateY(1px);
+  }
+  100% {
+    transform: translate3d(var(--tg-x, 0), var(--tg-y, 0), 0) scale(1) translateY(0);
+  }
+}
+
+@keyframes twInkBloom {
+  0% {
+    opacity: 0.55;
+    transform: scale(0.4);
+  }
+  40% {
+    opacity: 0.3;
+    transform: scale(1.2);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.5);
+  }
+}
+
+@keyframes twMechanicalBlink {
+  0%, 48% {
+    opacity: 1;
+  }
+  50%, 98% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+/* Rendered HTML Styling inside Paper Sheet */
+.tw-rendered-body {
+  color: var(--ink-current);
+  font-family: var(--font-sans);
+  line-height: 1.7;
+}
+
+.tw-rendered-body p {
+  margin-bottom: 1.25rem;
+}
+
+.tw-rendered-body .return-symbol {
+  display: inline;
+  color: var(--ink-current);
+  opacity: 0.85;
+  font-size: 0.9em;
+  font-family: var(--font-typewriter);
+  margin-left: 4px;
+  margin-right: 2px;
+  user-select: none;
+  font-weight: bold;
+  pointer-events: none;
+}
+
+.tw-rendered-body .return-symbol.p-symbol {
+  opacity: 0.95;
+}
+
+.tw-rendered-body h1 {
+  font-family: var(--font-typewriter);
+  font-size: 1.75rem;
+  border-bottom: 2px solid var(--ink-current);
+  padding-bottom: 6px;
+  margin-bottom: 12px;
+}
+
+.tw-rendered-body h2 {
+  font-family: var(--font-typewriter);
+  font-size: 1.35rem;
+  margin-top: 20px;
+  margin-bottom: 8px;
+}
+
+.tw-rendered-body h3 {
+  font-family: var(--font-typewriter);
+  font-size: 1.15rem;
+  margin-top: 16px;
+  margin-bottom: 6px;
+}
+
+.tw-rendered-body ul, .tw-rendered-body ol {
+  margin-bottom: 1.25rem;
+  padding-left: 1.5rem;
+}
+
+.tw-rendered-body li {
+  margin-bottom: 0.35rem;
+}
+
+.tw-rendered-body blockquote {
+  border-left: 3px dashed var(--ink-current);
+  padding-left: 14px;
+  margin: 14px 0;
+  font-style: italic;
+  opacity: 0.9;
+}
+
+.tw-rendered-body code {
+  font-family: var(--font-typewriter);
+  background: rgba(0, 0, 0, 0.06);
+  padding: 2px 5px;
+  border-radius: 3px;
+}
+
+.tw-rendered-body pre {
+  background: rgba(0, 0, 0, 0.04);
+  border: 1px dashed var(--ink-current);
+  padding: 12px 16px;
+  border-radius: 4px;
+  overflow-x: auto;
+  margin: 1.25rem 0;
+}
+
+.tw-rendered-body pre code {
+  background: transparent;
+  padding: 0;
+}
+
+.tw-rendered-body hr {
+  border: none;
+  border-top: 1px dashed var(--ink-current);
+  margin: 1.5rem 0;
+  opacity: 0.5;
+}
+
+/* Typewriter Table Styling */
+.tw-rendered-body table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.25rem 0;
+  font-family: var(--font-typewriter);
+  font-size: 0.95rem;
+}
+
+.tw-rendered-body th,
+.tw-rendered-body td {
+  border: 1px dashed var(--ink-current);
+  padding: 8px 12px;
+  text-align: left;
+}
+
+.tw-rendered-body th {
+  background: rgba(0, 0, 0, 0.05);
+  font-weight: 700;
+  border-bottom: 2px solid var(--ink-current);
+}
+
+.tw-rendered-body tr:nth-child(even) td {
+  background: rgba(0, 0, 0, 0.02);
+}
+
+/* Odometer Mechanical Footer */
+.tw-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #171513;
+  border: 1px solid #292524;
+  border-radius: var(--radius-md);
+  padding: 6px 14px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  flex-wrap: nowrap;
+  gap: 8px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: none;
+  flex-shrink: 0;
+}
+
+.tw-footer::-webkit-scrollbar {
+  display: none;
+}
+
+.odometer-group {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.odometer-label {
+  font-family: var(--font-sans);
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: #78716c;
+  letter-spacing: 0.05em;
+}
+
+.odometer {
+  display: flex;
+  background: #09090b;
+  border: 1px solid #3f3f46;
+  border-radius: 4px;
+  padding: 2px 4px;
+  gap: 2px;
+}
+
+.odometer .digit {
+  font-family: var(--font-typewriter);
+  font-size: 0.85rem;
+  font-weight: 700;
+  background: #18181b;
+  color: #f5f5f4;
+  padding: 1px 5px;
+  border-radius: 2px;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.8);
+}
+
+.odometer-unit {
+  font-family: var(--font-sans);
+  font-size: 0.7rem;
+  color: #a8a29e;
+  font-weight: 600;
+}
+
+.tw-footer-stats {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-sans);
+  font-size: 0.775rem;
+  color: #a8a29e;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.tw-save-indicator {
+  color: #10b981;
+  font-weight: 500;
+  transition: color 0.2s ease;
+}
+
+.tw-save-indicator.save-error {
+  color: #ef4444;
+  font-weight: 600;
+}
+
+.tw-save-indicator.save-warning {
+  color: #f59e0b;
+}
+
+.stat-sep {
+  color: #44403c;
+}
+
+.tw-footer-export {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+  flex-shrink: 0;
+  margin-left: auto;
+}
+
+.fn-label {
+  font-family: var(--font-sans);
+  font-size: 0.7rem;
+  color: #78716c;
+  font-weight: 700;
+}
+
+.tw-author-link {
+  color: #d97706;
+  text-decoration: none;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  transition: color 0.15s ease;
+}
+
+.tw-author-link:hover,
+.tw-sub .tw-author-link:hover {
+  text-decoration: underline;
+  color: #f59e0b;
+}
+
+.tw-sub .tw-author-link {
+  color: #d97706;
+  font-weight: 600;
+}
+
+.modal-author-credit {
+  margin-top: 8px;
+  font-size: 0.8rem;
+  color: #78716c;
+}
+
+.modal-author-credit a {
+  color: #d97706;
+  text-decoration: underline;
+}
+
+.tw-filename {
+  font-family: var(--font-typewriter);
+  font-size: 0.8rem;
+  color: #34d399;
+  background: #09090b;
+  padding: 2px 8px;
+  border-radius: 3px;
+  border: 1px solid #27272a;
+}
+
+/* Toast */
+.toast {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  background: #1c1917;
+  border: 1px solid #b91c1c;
+  color: #f5f5f4;
+  padding: 10px 18px;
+  border-radius: var(--radius-md);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6);
+  font-family: var(--font-sans);
+  font-size: 0.875rem;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  opacity: 0;
+  transform: translateY(10px);
+  pointer-events: none;
+  transition: all 0.25s ease;
+  z-index: 1000;
+}
+
+.toast.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Floating Exit Fullscreen Button */
+.floating-exit-fs {
+  position: fixed;
+  top: 16px;
+  right: 24px;
+  z-index: 9999;
+  background: rgba(28, 25, 23, 0.85);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid #52525b;
+  color: #e4e4e7;
+  font-family: var(--font-sans);
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 8px 14px;
+  border-radius: 20px;
+  cursor: pointer;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+  display: none;
+  align-items: center;
+  gap: 8px;
+  opacity: 0.6;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body.distraction-free-mode .floating-exit-fs,
+body.fullscreen-active .floating-exit-fs {
+  display: inline-flex !important;
+}
+
+.floating-exit-fs:hover,
+.floating-exit-fs:active {
+  opacity: 1;
+  background: rgba(185, 28, 28, 0.9);
+  border-color: #ef4444;
+  color: #ffffff;
+  transform: translateY(-2px);
+  box-shadow: 0 12px 28px rgba(185, 28, 28, 0.4);
+}
+
+.floating-exit-fs kbd {
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 4px;
+  padding: 2px 6px;
+  font-size: 0.7rem;
+  font-family: var(--font-sans);
+}
+
+.floating-exit-fs.hidden {
+  display: none !important;
+}
+
+/* Distraction-Free Fullscreen Mode Styles */
+body.distraction-free-mode {
+  overflow: hidden;
+}
+
+body.distraction-free-mode .tw-header,
+body.distraction-free-mode .tw-footer {
+  display: none !important;
+}
+
+body.distraction-free-mode .desk-container {
+  max-width: 100%;
+  height: 100vh;
+  padding: 12px 24px;
+  gap: 8px;
+}
+
+body.distraction-free-mode .tw-machine {
+  height: 100%;
+  border-radius: 0;
+  border: none;
+}
+
+body.distraction-free-mode .paper-wrapper {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 24px 24px 100px 24px;
+}
+
+body.distraction-free-mode .paper-sheet {
+  max-width: 960px;
+  margin: 0 auto;
+  min-height: 100%;
+  height: auto;
+  padding: 44px 52px 55vh 52px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7), 0 2px 8px rgba(0, 0, 0, 0.4);
+}
+
+body.distraction-free-mode .paper-sheet.preview-active {
+  padding-bottom: 80px;
+}
+
+/* Auto-fade all UI noise during active typing in Skrivemaskine */
+body.is-typing .tw-toolbar,
+body.is-typing .mode-tabs,
+body.is-typing .tw-meta-grid,
+body.is-typing .tw-meta-inputs {
+  opacity: 0.08 !important;
+  transition: opacity 0.6s ease;
+}
+
+body.is-typing .tw-toolbar:hover,
+body.is-typing .mode-tabs:hover,
+body.is-typing .tw-meta-grid:hover,
+body.is-typing .tw-meta-inputs:hover {
+  opacity: 1 !important;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1250px) {
+  .tw-brand-info .tw-sub {
+    display: none;
+  }
+  .ribbon-label {
+    display: none;
+  }
+}
+
+@media (max-width: 1000px) {
+  .tw-header {
+    gap: 4px;
+    padding: 6px 10px;
+  }
+  .tw-header-actions .tw-btn span {
+    display: none;
+  }
+  .tw-v-divider {
+    display: none;
+  }
+}
+
+@media (max-width: 768px) {
+  body.typewriter-body {
+    height: 100vh;
+    height: 100dvh;
+    overflow: hidden;
+  }
+
+  .desk-container {
+    height: 100vh;
+    height: 100dvh;
+    max-height: 100dvh;
+    padding: 4px 6px;
+    gap: 4px;
+    overflow: hidden;
+  }
+
+  .tw-brand {
+    gap: 6px;
+  }
+
+  .tw-brand-info h1 {
+    font-size: 0.85rem;
+  }
+
+  .tw-sub,
+  .tw-badge,
+  .tw-v-divider,
+  #btnShortcuts,
+  #btnFullscreen {
+    display: none !important;
+  }
+
+  .tw-header-actions .tw-btn:not(.dropdown-toggle) span,
+  .tw-nav-group .tw-btn span {
+    display: none !important;
+  }
+
+  .tw-header {
+    padding: 4px 6px;
+    gap: 4px;
+  }
+
+  .tw-header-actions {
+    gap: 3px;
+  }
+
+  .tw-header-sub {
+    padding-top: 3px;
+    gap: 4px;
+  }
+
+  .tw-btn {
+    padding: 3px 6px;
+    font-size: 0.72rem;
+  }
+
+  .typewriter-machine {
+    flex: 1 1 auto;
+    min-height: 0;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  .paper-sheet {
+    padding: 10px 8px;
+    margin: 0;
+    width: 100%;
+    max-width: 100%;
+    flex: 1 1 auto;
+    min-height: 0;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  .margin-line {
+    left: 8px;
+  }
+
+  .paper-header-fields {
+    gap: 4px;
+    margin-bottom: 4px;
+  }
+
+  .tw-field-group {
+    gap: 2px;
+  }
+
+  .tw-field-label {
+    font-size: 0.68rem;
+  }
+
+  .tw-input {
+    font-size: 0.82rem;
+    height: 22px;
+    padding: 2px 4px;
+  }
+
+  .tw-title-input {
+    font-size: 0.95rem;
+  }
+
+  .tw-input-with-chips {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 2px;
+  }
+
+  .tw-chips {
+    gap: 3px;
+    flex-wrap: wrap;
+  }
+
+  .tw-chip {
+    padding: 1px 5px;
+    font-size: 0.65rem;
+  }
+
+  .tw-toolbar {
+    padding: 4px 6px;
+    gap: 4px;
+    flex-shrink: 0;
+  }
+
+  .tw-keys-row {
+    gap: 3px;
+  }
+
+  .tw-actions-row {
+    gap: 4px;
+    padding-top: 3px;
+  }
+
+  .key-divider {
+    display: none;
+  }
+
+  .tw-key:not(.tw-key-action) {
+    width: 26px;
+    height: 26px;
+    min-width: 26px;
+    font-size: 0.7rem;
+  }
+
+  .tw-key-action {
+    width: auto !important;
+    min-width: unset !important;
+    height: 26px !important;
+    padding: 0 8px !important;
+    font-size: 0.72rem !important;
+    white-space: nowrap !important;
+    flex-shrink: 0 !important;
+  }
+
+  .editor-wrapper {
+    flex: 1 1 auto;
+    min-height: 0;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  .tw-editor {
+    flex: 1 1 auto;
+    height: 100% !important;
+    min-height: 0 !important;
+    font-size: 16px;
+    padding: 8px 12px;
+  }
+
+  .tw-status-bar {
+    padding: 3px 6px;
+    font-size: 0.7rem;
+    flex-shrink: 0;
+  }
+}
+
+/* ==========================================================================
+   Typewriter Export Dropdown & Modal Styles
+   ========================================================================== */
+.tw-key-focus.active {
+  background: linear-gradient(180deg, #b45309 0%, #78350f 100%) !important;
+  color: #fef3c7 !important;
+  border-color: #f59e0b !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 0 12px rgba(245, 158, 11, 0.5) !important;
+}
+
+.editor-wrapper {
+  position: relative;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+
+
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-toggle {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.dropdown-toggle .chevron {
+  width: 14px;
+  height: 14px;
+  transition: transform 0.2s ease;
+}
+
+.dropdown.open .chevron {
+  transform: rotate(180deg);
+}
+
+.tw-dropdown-menu {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  min-width: 220px;
+  background: #1c1917;
+  border: 1px solid #44403c;
+  border-radius: var(--radius-md);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6);
+  padding: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  z-index: 10001;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-8px);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.dropdown.open .tw-dropdown-menu {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.tw-dropdown-menu .dropdown-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 9px 12px;
+  border: none;
+  background: transparent;
+  color: #f5f5f4;
+  font-family: var(--font-sans);
+  font-size: 0.85rem;
+  font-weight: 500;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: background 0.15s ease;
+  text-align: left;
+}
+
+.tw-dropdown-menu .dropdown-item i {
+  width: 15px;
+  height: 15px;
+  margin-right: 8px;
+  color: #f87171;
+}
+
+.tw-dropdown-menu .dropdown-item:hover {
+  background: #292524;
+  color: #f87171;
+}
+
+.shortcut-tag {
+  font-family: var(--font-typewriter);
+  font-size: 0.725rem;
+  color: #a8a29e;
+  background: #09090b;
+  border: 1px solid #3f3f46;
+  padding: 1px 5px;
+  border-radius: 3px;
+  margin-left: 12px;
+}
+
+.tw-dropdown-menu .dropdown-divider {
+  height: 1px;
+  margin: 4px 0;
+  background: #3f3f46;
+  border: none;
+}
+
+/* Modal Dialog in Typewriter Theme */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(12, 10, 9, 0.85);
+  backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  opacity: 1;
+  visibility: visible;
+  transition: all 0.25s ease;
+}
+
+.modal-backdrop.hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.tw-modal-card {
+  background: #1c1917;
+  border: 1px solid #44403c;
+  border-radius: var(--radius-lg);
+  width: 90%;
+  max-width: 520px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.8);
+  overflow: hidden;
+  color: #f5f5f4;
+}
+
+.tw-modal-card .modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  background: #0c0a09;
+  border-bottom: 1px solid #292524;
+}
+
+.tw-modal-card .modal-header h3 {
+  font-family: var(--font-typewriter);
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #f87171;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.tw-modal-card .modal-close {
+  background: transparent;
+  border: none;
+  font-size: 1.5rem;
+  color: #a8a29e;
+  cursor: pointer;
+}
+
+.tw-modal-card .modal-close:hover {
+  color: #ffffff;
+}
+
+.tw-modal-card .modal-body {
+  padding: 20px;
+  max-height: 60vh;
+  overflow-y: auto;
+}
+
+.shortcut-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+}
+
+.shortcut-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  background: #292524;
+  border: 1px solid #44403c;
+  border-radius: var(--radius-md);
+  font-family: var(--font-sans);
+  font-size: 0.875rem;
+}
+
+.tw-modal-card kbd {
+  display: inline-block;
+  padding: 3px 7px;
+  font-family: var(--font-typewriter);
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #f87171;
+  background: #0c0a09;
+  border: 1px solid #44403c;
+  border-radius: 4px;
+}
+
+.tw-modal-card .modal-footer {
+  padding: 12px 20px;
+  background: #0c0a09;
+  border-top: 1px solid #292524;
+  text-align: center;
+}
+
+.tw-modal-card .modal-hint {
+  font-family: var(--font-sans);
+  font-size: 0.775rem;
+  color: #78716c;
+}
+
+/* ==========================================================================
+   Typewriter Print Styles (@media print)
+   ========================================================================== */
+@media print {
+  @page {
+    size: A4;
+    margin: 20mm 15mm;
+  }
+
+  *, *::before, *::after {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  body, .typewriter-body {
+    background: #ffffff !important;
+    color: #1c1917 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  .tw-header,
+  .tw-carriage,
+  .tw-toolbar,
+  .mode-tabs,
+  .tw-footer,
+  .toast,
+  .modal-backdrop,
+  .floating-exit-fs,
+  .paper-header-fields,
+  .paper-divider,
+  #editorView,
+  .tw-textarea,
+  .focus-timer-widget,
+  .focus-timer-mount,
+  .focus-timer-overlay,
+  .return-symbol {
+    display: none !important;
+    visibility: hidden !important;
+  }
+
+  .return-symbol,
+  .return-symbol.p-symbol,
+  .return-symbol.br-symbol {
+    display: none !important;
+    visibility: hidden !important;
+    font-size: 0 !important;
+    width: 0 !important;
+    height: 0 !important;
+    line-height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  .desk-container,
+  .tw-machine,
+  .paper-wrapper,
+  .paper-sheet {
+    display: block !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    height: auto !important;
+    background: #ffffff !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  .margin-line {
+    display: none !important;
+  }
+
+  /* Force rendered HTML view to display when printing */
+  #previewView,
+  .tw-view-container#previewView,
+  .tw-view-container.hidden#previewView {
+    display: block !important;
+  }
+
+  .tw-rendered-body {
+    display: block !important;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif !important;
+    font-size: 11pt !important;
+    line-height: 1.65 !important;
+    color: #0c0a09 !important;
+    padding: 0 !important;
+    max-width: 100% !important;
+  }
+
+  .tw-rendered-body h1,
+  .tw-rendered-body h2,
+  .tw-rendered-body h3,
+  .tw-rendered-body h4,
+  .tw-rendered-body h5,
+  .tw-rendered-body h6 {
+    page-break-after: avoid;
+    break-after: avoid;
+  }
+
+  .tw-rendered-body h1 {
+    font-size: 22pt !important;
+    border-bottom: 2pt solid #e2e8f0 !important;
+    margin-top: 0 !important;
+    padding-bottom: 6pt !important;
+  }
+
+  .tw-rendered-body h2 {
+    font-size: 16pt !important;
+    border-bottom: 1pt solid #f1f5f9 !important;
+    margin-top: 18pt !important;
+    padding-bottom: 4pt !important;
+  }
+
+  .tw-rendered-body h3 {
+    font-size: 13pt !important;
+    margin-top: 14pt !important;
+  }
+
+  .tw-rendered-body em.meta-tag, .tw-rendered-body p > em:first-child {
+    background: #f8fafc !important;
+    color: #0369a1 !important;
+    border-left: 3pt solid #0284c7 !important;
+    padding: 4pt 8pt !important;
+    display: inline-block !important;
+    margin-bottom: 12pt !important;
+  }
+
+  .tw-rendered-body blockquote {
+    background: #f8fafc !important;
+    border-left: 4pt solid #3b82f6 !important;
+    color: #475569 !important;
+    padding: 8pt 12pt !important;
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+
+  .tw-rendered-body code {
+    background: #f1f5f9 !important;
+    color: #b45309 !important;
+    border: 1px solid #e2e8f0 !important;
+    font-size: 9.5pt !important;
+  }
+
+  .tw-rendered-body pre {
+    background: #f8fafc !important;
+    border: 1px solid #e2e8f0 !important;
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+
+  .tw-rendered-body table,
+  .tw-rendered-body img,
+  .tw-rendered-body .mermaid {
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+}
+
