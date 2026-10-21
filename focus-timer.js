@@ -9,19 +9,46 @@
   'use strict';
 
   // --- STATE ---
+  const TIMER_STORAGE_KEY = 'md_writer_focus_timer_state';
   let workDurationSeconds = 25 * 60; // Default 25 min
   let breakDurationSeconds = 5 * 60; // Default 5 min
   let remainingSeconds = workDurationSeconds;
+  let targetEndTime = null;
   let timerInterval = null;
   let timerState = 'stopped'; // 'stopped', 'running', 'paused', 'break'
   let typingTimeout = null;
 
   // --- WEB AUDIO CHIME (No external files required) ---
+  let chimeAudioCtx = null;
+  function getChimeContext() {
+    try {
+      if (!chimeAudioCtx) {
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        if (AudioCtx) chimeAudioCtx = new AudioCtx();
+      }
+      if (chimeAudioCtx && chimeAudioCtx.state === 'suspended') {
+        chimeAudioCtx.resume().catch(() => {});
+      }
+      return chimeAudioCtx;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  // Pre-unlock audio on any initial interaction
+  ['click', 'keydown', 'touchstart'].forEach(evt => {
+    window.addEventListener(evt, () => {
+      getChimeContext();
+    }, { once: false, passive: true });
+  });
+
   function playFocusChime() {
     try {
-      const AudioCtx = window.AudioContext || window.webkitAudioContext;
-      if (!AudioCtx) return;
-      const ctx = new AudioCtx();
+      const ctx = getChimeContext();
+      if (!ctx) return;
+      if (ctx.state === 'suspended') {
+        ctx.resume().catch(() => {});
+      }
 
       const osc1 = ctx.createOscillator();
       const osc2 = ctx.createOscillator();
@@ -234,29 +261,116 @@
     bindEvents();
     bindAutoUIHide();
     bindFullscreenMonitoring();
+    restoreTimerState();
+    updateWidgetUI();
+  }
+
+  // --- TIMER STATE PERSISTENCE ---
+  function saveTimerState() {
+    try {
+      const data = {
+        timerState,
+        workDurationSeconds,
+        breakDurationSeconds,
+        remainingSeconds,
+        targetEndTime: (timerState === 'running' || (timerState === 'break' && timerInterval)) ? targetEndTime : null,
+        savedAt: Date.now()
+      };
+      localStorage.setItem(TIMER_STORAGE_KEY, JSON.stringify(data));
+    } catch (e) {}
+  }
+
+  function restoreTimerState() {
+    try {
+      const raw = localStorage.getItem(TIMER_STORAGE_KEY);
+      if (!raw) return;
+      const data = JSON.parse(raw);
+      if (!data) return;
+
+      if (data.workDurationSeconds && typeof data.workDurationSeconds === 'number') {
+        workDurationSeconds = data.workDurationSeconds;
+      }
+      if (data.breakDurationSeconds && typeof data.breakDurationSeconds === 'number') {
+        breakDurationSeconds = data.breakDurationSeconds;
+      }
+
+      if (data.timerState === 'running' || (data.timerState === 'break' && data.targetEndTime)) {
+        if (data.targetEndTime) {
+          const now = Date.now();
+          const diff = Math.round((data.targetEndTime - now) / 1000);
+          if (diff <= 0) {
+            timerState = data.timerState;
+            remainingSeconds = 0;
+            onTimerComplete();
+          } else {
+            timerState = data.timerState;
+            remainingSeconds = diff;
+            targetEndTime = data.targetEndTime;
+            runTimerTick();
+          }
+        } else {
+          timerState = 'paused';
+          remainingSeconds = data.remainingSeconds || workDurationSeconds;
+        }
+      } else if (data.timerState === 'paused') {
+        timerState = 'paused';
+        remainingSeconds = data.remainingSeconds || workDurationSeconds;
+      } else if (data.timerState === 'break') {
+        timerState = 'break';
+        remainingSeconds = data.remainingSeconds || breakDurationSeconds;
+        showBreakOverlay();
+      } else {
+        timerState = 'stopped';
+        remainingSeconds = workDurationSeconds;
+      }
+
+      // Update dropdown preset active state
+      const wMins = Math.round(workDurationSeconds / 60);
+      const bMins = Math.round(breakDurationSeconds / 60);
+      document.querySelectorAll('.focus-timer-dropdown-item[data-work]').forEach(el => {
+        const itemW = parseInt(el.getAttribute('data-work'), 10);
+        const itemB = parseInt(el.getAttribute('data-break'), 10);
+        el.classList.toggle('active', itemW === wMins && itemB === bMins);
+      });
+    } catch (e) {}
   }
 
   // --- TIMER LOGIC ---
-  function startTimer() {
-    // Automatically enter fullscreen on starting a focus session
-    enterFullscreen();
-
-    if (timerState === 'running') return;
-
-    timerState = (timerState === 'break') ? 'break' : 'running';
-    updateWidgetUI();
+  function runTimerTick() {
+    if (timerInterval) clearInterval(timerInterval);
 
     timerInterval = setInterval(() => {
-      remainingSeconds--;
+      if (targetEndTime) {
+        remainingSeconds = Math.max(0, Math.round((targetEndTime - Date.now()) / 1000));
+      } else {
+        remainingSeconds--;
+      }
 
       if (remainingSeconds <= 0) {
         clearInterval(timerInterval);
         timerInterval = null;
+        targetEndTime = null;
         onTimerComplete();
       } else {
         updateWidgetUI();
+        saveTimerState();
       }
     }, 1000);
+  }
+
+  function startTimer(skipFullscreen = false) {
+    if (!skipFullscreen) {
+      enterFullscreen();
+    }
+    getChimeContext();
+
+    if (timerState === 'running' && timerInterval) return;
+
+    timerState = (timerState === 'break') ? 'break' : 'running';
+    targetEndTime = Date.now() + remainingSeconds * 1000;
+    saveTimerState();
+    updateWidgetUI();
+    runTimerTick();
   }
 
   function pauseTimer() {
@@ -264,7 +378,12 @@
       clearInterval(timerInterval);
       timerInterval = null;
     }
+    if (targetEndTime) {
+      remainingSeconds = Math.max(0, Math.round((targetEndTime - Date.now()) / 1000));
+      targetEndTime = null;
+    }
     if (timerState === 'running') timerState = 'paused';
+    saveTimerState();
     updateWidgetUI();
   }
 
@@ -273,8 +392,10 @@
       clearInterval(timerInterval);
       timerInterval = null;
     }
+    targetEndTime = null;
     timerState = 'stopped';
     remainingSeconds = workDurationSeconds;
+    saveTimerState();
     updateWidgetUI();
   }
 
@@ -291,11 +412,15 @@
       // Work session ended -> Show Break Overlay
       timerState = 'break';
       remainingSeconds = breakDurationSeconds;
+      targetEndTime = null;
+      saveTimerState();
       showBreakOverlay();
     } else if (timerState === 'break') {
       // Break ended -> Return to Stopped / Ready state
       timerState = 'stopped';
       remainingSeconds = workDurationSeconds;
+      targetEndTime = null;
+      saveTimerState();
       hideBreakOverlay();
       if (typeof window.showToast === 'function') {
         window.showToast('Pausen er slut! Klar til ny fokus-session.', 'award');
@@ -532,15 +657,30 @@
 
     // Tab / App visibility change monitoring (especially for iPad / tablet / backgrounding)
     document.addEventListener('visibilitychange', () => {
-      if (document.visibilityState === 'visible' && timerState === 'running') {
-        const isFs = !!(
-          document.fullscreenElement ||
-          document.webkitFullscreenElement ||
-          document.body.classList.contains('distraction-free-mode') ||
-          document.body.classList.contains('fullscreen-active')
-        );
-        if (!isFs) {
-          showStrictWarning('Du forlod appen under en aktiv fokussession. Vil du genoptage fuldskærm eller afbryde timeren?');
+      if (document.visibilityState === 'visible') {
+        if ((timerState === 'running' || (timerState === 'break' && timerInterval)) && targetEndTime) {
+          remainingSeconds = Math.max(0, Math.round((targetEndTime - Date.now()) / 1000));
+          if (remainingSeconds <= 0) {
+            if (timerInterval) clearInterval(timerInterval);
+            timerInterval = null;
+            targetEndTime = null;
+            onTimerComplete();
+          } else {
+            updateWidgetUI();
+            saveTimerState();
+          }
+        }
+
+        if (timerState === 'running') {
+          const isFs = !!(
+            document.fullscreenElement ||
+            document.webkitFullscreenElement ||
+            document.body.classList.contains('distraction-free-mode') ||
+            document.body.classList.contains('fullscreen-active')
+          );
+          if (!isFs) {
+            showStrictWarning('Du forlod appen under en aktiv fokussession. Vil du genoptage fuldskærm eller afbryde timeren?');
+          }
         }
       }
     });
@@ -548,6 +688,13 @@
     // Confirmation when attempting to close tab or leave page while session is running
     window.addEventListener('beforeunload', (e) => {
       if (timerState === 'running') {
+        const activeLink = document.activeElement;
+        if (activeLink && activeLink.tagName === 'A') {
+          const href = activeLink.getAttribute('href') || '';
+          if (href.includes('index.html') || href.includes('skrivemaskine.html') || href.includes('terminal.html') || href === './') {
+            return;
+          }
+        }
         e.preventDefault();
         e.returnValue = 'Du har en aktiv fokussession i gang. Er du sikker på, at du vil forlade siden?';
         return e.returnValue;
@@ -556,6 +703,10 @@
   }
 
   // --- EXPOSE GLOBAL API ---
+  window.updateFocusTimerPlacement = function () {
+    updateWidgetUI();
+  };
+
   window.FocusTimer = {
     isRunning: () => timerState === 'running',
     getState: () => timerState,

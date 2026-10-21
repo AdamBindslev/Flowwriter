@@ -5,10 +5,23 @@
   if ('serviceWorker' in navigator) {
     let refreshing = false;
 
-    // Reload page immediately when a new service worker takes control
+    // Reload page safely when a new service worker takes control
     navigator.serviceWorker.addEventListener('controllerchange', () => {
       if (!refreshing) {
         refreshing = true;
+        // Ensure active draft is safely persisted before reload
+        try {
+          const titleEl = document.getElementById('docTitle');
+          const catEl = document.getElementById('docCategories');
+          const textEl = document.getElementById('editorTextarea');
+          if (window.MDCore && window.MDCore.Storage) {
+            window.MDCore.Storage.saveDraft({
+              title: titleEl ? titleEl.value : '',
+              categories: catEl ? catEl.value : '',
+              body: textEl ? textEl.value : ''
+            });
+          }
+        } catch (e) {}
         window.location.reload();
       }
     });

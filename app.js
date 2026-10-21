@@ -26,6 +26,8 @@ document.addEventListener('DOMContentLoaded', () => {
   // Theme Toggle
   const btnThemeToggle = document.getElementById('btnThemeToggle');
   const themeIcon = document.getElementById('themeIcon');
+  const THEME_KEY = 'md_writer_theme';
+  const VIEW_MODE_KEY = 'md_writer_view_mode';
 
   // Midline / Centered Typewriter Scroll Toggle
   const btnMidlineToggle = document.getElementById('btnMidlineToggle');
@@ -398,21 +400,25 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // View Mode Switcher
   function setViewMode(mode) {
-    btnViewSplit.classList.remove('active');
-    btnViewEditor.classList.remove('active');
-    btnViewPreview.classList.remove('active');
-    workspace.classList.remove('mode-split', 'mode-editor', 'mode-preview');
+    if (btnViewSplit) btnViewSplit.classList.remove('active');
+    if (btnViewEditor) btnViewEditor.classList.remove('active');
+    if (btnViewPreview) btnViewPreview.classList.remove('active');
+    if (workspace) workspace.classList.remove('mode-split', 'mode-editor', 'mode-preview');
 
     if (mode === 'split') {
-      btnViewSplit.classList.add('active');
-      workspace.classList.add('mode-split');
+      if (btnViewSplit) btnViewSplit.classList.add('active');
+      if (workspace) workspace.classList.add('mode-split');
     } else if (mode === 'editor') {
-      btnViewEditor.classList.add('active');
-      workspace.classList.add('mode-editor');
+      if (btnViewEditor) btnViewEditor.classList.add('active');
+      if (workspace) workspace.classList.add('mode-editor');
     } else if (mode === 'preview') {
-      btnViewPreview.classList.add('active');
-      workspace.classList.add('mode-preview');
+      if (btnViewPreview) btnViewPreview.classList.add('active');
+      if (workspace) workspace.classList.add('mode-preview');
     }
+
+    try {
+      localStorage.setItem(VIEW_MODE_KEY, mode);
+    } catch (e) {}
   }
 
   if (btnViewSplit) btnViewSplit.addEventListener('click', () => setViewMode('split'));
@@ -425,7 +431,10 @@ document.addEventListener('DOMContentLoaded', () => {
       const currentTheme = document.documentElement.getAttribute('data-theme');
       const newTheme = currentTheme === 'light' ? 'dark' : 'light';
       document.documentElement.setAttribute('data-theme', newTheme);
-      themeIcon.setAttribute('data-feather', newTheme === 'light' ? 'moon' : 'sun');
+      try {
+        localStorage.setItem(THEME_KEY, newTheme);
+      } catch (e) {}
+      if (themeIcon) themeIcon.setAttribute('data-feather', newTheme === 'light' ? 'moon' : 'sun');
       if (window.feather) feather.replace();
       renderPreview();
       showToast(`Skiftede til ${newTheme === 'light' ? 'Lyst' : 'Mørkt'} tema`);
@@ -812,6 +821,18 @@ document.addEventListener('DOMContentLoaded', () => {
   document.addEventListener('webkitfullscreenchange', handleFullscreenChange);
 
   // Initial Load Pipeline
+  const savedTheme = safeGetStorage(THEME_KEY, 'dark');
+  document.documentElement.setAttribute('data-theme', savedTheme);
+  if (themeIcon) {
+    themeIcon.setAttribute('data-feather', savedTheme === 'light' ? 'moon' : 'sun');
+    if (window.feather) feather.replace();
+  }
+
+  const savedViewMode = safeGetStorage(VIEW_MODE_KEY, 'split');
+  if (['split', 'editor', 'preview'].includes(savedViewMode)) {
+    setViewMode(savedViewMode);
+  }
+
   updateMidlineUI();
   if (Storage) {
     const savedDraft = Storage.loadDraft();

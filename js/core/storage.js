@@ -6,9 +6,9 @@
 
 (function () {
   window.MDCore = window.MDCore || {};
-  window.MDCore.VERSION = '2.4.5';
+  window.MDCore.VERSION = '2.4.7';
 
-  console.log('%c🚀 Flowscribe Core v2.4.5 aktiv', 'background: #2563eb; color: #fff; padding: 4px 8px; border-radius: 4px; font-weight: bold;');
+  console.log('%c🚀 Flowscribe Core v2.4.7 aktiv', 'background: #2563eb; color: #fff; padding: 4px 8px; border-radius: 4px; font-weight: bold;');
 
   const DRAFT_KEY = 'md_writer_draft';
 
@@ -259,24 +259,33 @@ I aften står den på tørring af støvler og notatskrivning ved petroleumslampe
     let bodyLines = [];
     let lineIdx = 0;
 
-    // Check if line 1 is H1 title (# Title)
-    if (lines.length > 0 && lines[0].startsWith('# ')) {
-      title = lines[0].substring(2).trim();
+    // Skip any leading empty lines before title
+    while (lineIdx < lines.length && lines[lineIdx].trim() === '') {
       lineIdx++;
-      if (lineIdx < lines.length && lines[lineIdx].trim() === '') {
-        lineIdx++;
-      }
+    }
+
+    // Check if line is H1 title (# Title)
+    if (lineIdx < lines.length && lines[lineIdx].startsWith('# ')) {
+      title = lines[lineIdx].substring(2).trim();
+      lineIdx++;
     } else {
       title = (fileName || 'dokument').replace(/\.md$/i, '');
+    }
+
+    // Skip any empty lines between title and categories
+    while (lineIdx < lines.length && lines[lineIdx].trim() === '') {
+      lineIdx++;
     }
 
     // Check if next non-empty line is metadata in asterisks (*Dato: ...*)
     if (lineIdx < lines.length && lines[lineIdx].trim().startsWith('*') && lines[lineIdx].trim().endsWith('*')) {
       categories = lines[lineIdx].trim().slice(1, -1).trim();
       lineIdx++;
-      if (lineIdx < lines.length && lines[lineIdx].trim() === '') {
-        lineIdx++;
-      }
+    }
+
+    // Skip any empty lines between categories and body
+    while (lineIdx < lines.length && lines[lineIdx].trim() === '') {
+      lineIdx++;
     }
 
     bodyLines = lines.slice(lineIdx);

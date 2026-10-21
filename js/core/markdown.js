@@ -117,12 +117,17 @@
    */
   async function renderMermaid(container, isDark = true) {
     if (!container) return;
-    const mermaidCodes = container.querySelectorAll('code.language-mermaid, pre.language-mermaid');
+    const mermaidCodes = container.querySelectorAll('pre > code.language-mermaid, pre.language-mermaid');
     if (mermaidCodes.length === 0) return;
 
     const createdDivs = [];
+    const processedParents = new Set();
+
     mermaidCodes.forEach((el) => {
       const parent = el.tagName.toLowerCase() === 'code' ? el.parentElement : el;
+      if (!parent || !parent.parentElement || processedParents.has(parent)) return;
+      processedParents.add(parent);
+
       const codeText = el.textContent;
       const div = document.createElement('div');
       div.className = 'mermaid';

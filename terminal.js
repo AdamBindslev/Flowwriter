@@ -832,17 +832,56 @@ document.addEventListener('DOMContentLoaded', () => {
       if (btn) btn.click();
       return;
     }
+    const isInputActive = ['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName);
+    if (e.key === '?' && !isInputActive) {
+      e.preventDefault();
+      if (shortcutModal) shortcutModal.classList.remove('hidden');
+      return;
+    }
+
     if (e.altKey && (e.key === 'f' || e.key === 'F')) {
       e.preventDefault();
       toggleFullscreen();
     }
-    if ((e.ctrlKey || e.metaKey) && e.key === 's') {
-      e.preventDefault();
-      if (btnExportMd) btnExportMd.click();
-    }
-    if ((e.ctrlKey || e.metaKey) && e.key === 'p') {
-      e.preventDefault();
-      if (btnPrintPdf) btnPrintPdf.click();
+    if (e.ctrlKey || e.metaKey) {
+      const key = e.key.toLowerCase();
+      if (key === 's') {
+        e.preventDefault();
+        if (btnExportMd) btnExportMd.click();
+      } else if (key === 'p' && !e.shiftKey) {
+        e.preventDefault();
+        if (btnPrintPdf) btnPrintPdf.click();
+      } else if (key === '/') {
+        e.preventDefault();
+        if (shortcutModal) shortcutModal.classList.toggle('hidden');
+      } else if (key === 'b') {
+        e.preventDefault();
+        if (Formatter) {
+          Formatter.applyFormat('bold', editorTextarea, () => {
+            renderPreview();
+            updateToolbarStates();
+            scrollTerminalToCenter(true);
+          });
+        }
+      } else if (key === 'i') {
+        e.preventDefault();
+        if (Formatter) {
+          Formatter.applyFormat('italic', editorTextarea, () => {
+            renderPreview();
+            updateToolbarStates();
+            scrollTerminalToCenter(true);
+          });
+        }
+      } else if (key === 'k') {
+        e.preventDefault();
+        if (Formatter) {
+          Formatter.applyFormat('link', editorTextarea, () => {
+            renderPreview();
+            updateToolbarStates();
+            scrollTerminalToCenter(true);
+          });
+        }
+      }
     }
     if (e.key === 'Escape') {
       let modalOrDropdownClosed = false;

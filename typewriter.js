@@ -70,6 +70,9 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
+  // Ribbon Color Key
+  const RIBBON_KEY = 'md_writer_typewriter_ribbon';
+
   // Typewriter Center-Scroll State
   const TYPEWRITER_SCROLL_KEY = 'md_writer_typewriter_scroll';
   let typewriterScrollEnabled = true;
@@ -662,10 +665,13 @@ document.addEventListener('DOMContentLoaded', () => {
   // Ribbon Color Switcher
   ribbonBtns.forEach(btn => {
     btn.addEventListener('click', () => {
+      const ribbonColor = btn.getAttribute('data-ribbon');
       ribbonBtns.forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
-      const ribbonColor = btn.getAttribute('data-ribbon');
       document.documentElement.setAttribute('data-ribbon', ribbonColor);
+      try {
+        localStorage.setItem(RIBBON_KEY, ribbonColor);
+      } catch (e) {}
       playKeyClickSound();
     });
   });
@@ -1028,7 +1034,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     editorTextarea.addEventListener('input', () => {
-      autoResizeTextarea();
       renderPreview();
       updateTypeguide(true);
       scrollTypewriterToCenter(true);
@@ -1277,11 +1282,26 @@ document.addEventListener('DOMContentLoaded', () => {
         } else {
           openShortcutModal();
         }
+      } else if (key === 'b') {
+        e.preventDefault();
+        if (Formatter) Formatter.applyFormat('bold', editorTextarea, renderPreview);
+      } else if (key === 'i') {
+        e.preventDefault();
+        if (Formatter) Formatter.applyFormat('italic', editorTextarea, renderPreview);
+      } else if (key === 'k') {
+        e.preventDefault();
+        if (Formatter) Formatter.applyFormat('link', editorTextarea, renderPreview);
       }
     }
   });
 
   // Initial Load Pipeline
+  const savedRibbon = safeGetStorage(RIBBON_KEY, 'black');
+  document.documentElement.setAttribute('data-ribbon', savedRibbon);
+  ribbonBtns.forEach(b => {
+    b.classList.toggle('active', b.getAttribute('data-ribbon') === savedRibbon);
+  });
+
   updateSoundUI();
   updateTypewriterScrollUI();
   if (Storage) {

@@ -1,6 +1,6 @@
 # 📄 Flowscribe — Funktions- & Funktionsbeskrivelse
 
-> **Flowscribe v2.4.6** — En moderne, distraktionsfri skriveplatform med tre unikke skrivemiljøer: Standard Markdown Editor, Mekanisk Skrivemaskine og Retro CRT Terminal. Fuldstændig offline-kompatibel (PWA), 100 % privatlivsbevidst og optimeret til fokuseret tekstproduktion.
+> **Flowscribe v2.4.7** — En moderne, distraktionsfri skriveplatform med tre unikke skrivemiljøer: Standard Markdown Editor, Mekanisk Skrivemaskine og Retro CRT Terminal. Fuldstændig offline-kompatibel (PWA), 100 % privatlivsbevidst og optimeret til fokuseret tekstproduktion.
 
 ---
 
